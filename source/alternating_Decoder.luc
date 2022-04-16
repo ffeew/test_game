@@ -6,7 +6,7 @@ module alternating_Decoder (
   // 00 black
   // 01 green
   // 10 red
-  const COLORS = {24h000000, 24h0000FF, 24h00FF00};
+  const COLORS = {24h00FF00, 24h0000FF, 24h000000};
   
   sig array [256][24];
   sig reversedArray[256][24];
@@ -20,11 +20,11 @@ module alternating_Decoder (
             array[i] = COLORS[0];
         }
       
-      if (dataIn[i]== 2b01){
+      else if (dataIn[i]== 2b01){
             array[i] = COLORS[1];
         }
             
-      if (dataIn[i]== 2b10){
+      else if (dataIn[i]== 2b10){
             array[i] = COLORS[2];
         }
       else{
