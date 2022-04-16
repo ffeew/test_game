@@ -1,0 +1,43 @@
+module op_code_enum (
+    output add_16[6],
+    output sub_16[6],
+    output mul_16[6],
+    output div_16[6],
+    output mod_16[6],
+    output and_16[6],
+    output or_16[6],
+    output xor_16[6],
+    output t_a_16[6],
+    output nand_16[6],
+    output nor_16[6],
+    output xnor_16[6],
+    output t_b_16[6],
+    output shl_16[6],
+    output shr_16[6],
+    output sra_16[6],
+    output eq_16[6],
+    output lt_16[6],
+    output ltq_16[6]
+  ) {
+    always {
+      add_16  = c{0,0,0,0,0,0};
+      sub_16  = c{0,0,0,0,0,1};
+      mul_16  = c{0,0,0,1,0,0};
+      div_16  = c{0,0,0,1,0,1};
+      mod_16  = c{0,0,0,1,1,0};
+      and_16  = c{0,1,1,0,0,0};
+      or_16   = c{0,1,1,1,1,0};
+      xor_16  = c{0,1,0,1,1,0};
+      t_a_16  = c{0,1,1,0,1,0};
+      nand_16 = c{0,1,0,1,1,1};
+      nor_16  = c{0,1,0,0,0,1};
+      xnor_16 = c{0,1,1,0,0,1};
+      t_b_16  = c{0,1,1,1,0,0};
+      shl_16  = c{1,0,0,0,0,0};
+      shr_16  = c{1,0,0,0,0,1};
+      sra_16  = c{1,0,0,0,1,1};
+      eq_16   = c{1,1,0,0,1,1};
+      lt_16   = c{1,1,0,1,0,1};
+      ltq_16  = c{1,1,0,1,1,1};
+    }
+  }

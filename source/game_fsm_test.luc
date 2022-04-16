@@ -1,0 +1,117 @@
+module game_fsm_test (
+    input clk,  // clock
+    input rst,  // reset
+
+    input io_button [5],    // 5 buttons on IO Shield
+    input io_dip [3][8],     // DIP switches on IO Shield
+    
+    input button_0,
+    input button_1,
+    input button_2,
+    input button_3,
+    input button_4,
+    input button_5,
+    input button_6,
+    input button_7,
+    input button_8,
+    input button_9,
+    input button_a,
+    input button_b,
+    input button_c,
+    input button_d,
+    input button_asterisk,
+    input button_hash,
+
+    output display[16],
+    output disp_out[256][24]
+  ) {
+  
+  .clk(clk), .rst(rst) {
+    game_fsm game;
+    regfile regf;
+    led_state state_l;
+  }
+  alu aluTest;
+  alternating_Decoder decode;
+
+  always {
+    game.button_0 = button_0;
+    game.button_1 = button_1;
+    game.button_2 = button_2;
+    game.button_3 = button_3;
+    game.button_4 = button_4;
+    game.button_5 = button_5;
+    game.button_6 = button_6;
+    game.button_7 = button_7;
+    game.button_8 = button_8;
+    game.button_9 = button_9;
+
+    game.button_a = button_a;
+    game.button_b = button_b;
+    game.button_c = button_c;
+    game.button_d = button_d;
+
+    game.button_asterisk = button_asterisk;
+    game.button_hash = button_hash;
+
+    game.rb_data = 0;
+
+    regf.ra = game.ra;
+    regf.rb = game.rb;
+    regf.rc = game.rc;
+    regf.ra2sel = game.ra2sel;
+    regf.we = game.we;
+
+    aluTest.a = regf.ra_data;
+    aluTest.b = regf.rb_data;
+    aluTest.asel = game.asel;
+    aluTest.bsel = game.bsel;
+    aluTest.wdsel = game.wdsel;
+    aluTest.alufn = game.alufn;
+    aluTest.literal = game.literal;
+
+    regf.data = aluTest.out;
+
+    regf.debug_in = 0;
+
+    game.rb_data = regf.rb_data;
+
+    display = 0;
+    
+    case(io_dip[2][0]) {
+      0:
+        display = game.state;
+      1:
+        regf.debug_in = io_dip[0][4:0];
+        display = regf.debug_out;
+    }
+    
+    state_l.box00 = regf.box00_o;
+    state_l.box01 = regf.box01_o;
+    state_l.box02 = regf.box02_o;
+    state_l.box10 = regf.box10_o;
+    state_l.box11 = regf.box11_o;
+    state_l.box12 = regf.box12_o;
+    state_l.box20 = regf.box20_o;
+    state_l.box21 = regf.box21_o;
+    state_l.box22 = regf.box22_o;
+    state_l.pieces_remaining_small_p1 = regf.pieces_remaining_small_p1_o;
+    state_l.pieces_remaining_small_p2 = regf.pieces_remaining_small_p2_o;
+    state_l.pieces_remaining_med_p1 = regf.pieces_remaining_med_p1_o;
+    state_l.pieces_remaining_med_p2 = regf.pieces_remaining_med_p2_o;
+    state_l.pieces_remaining_large_p1 = regf.pieces_remaining_large_p1_o;
+    state_l.pieces_remaining_large_p2 = regf.pieces_remaining_large_p2_o;
+    state_l.box_addr = regf.box_addr_o;
+
+    state_l.game_state = game.state;
+
+    state_l.p1_select_box = game.p1_select_box;
+    state_l.p1_select_size = game.p1_select_size;
+    state_l.p2_select_box = game.p2_select_box;
+    state_l.p2_select_size = game.p2_select_size;
+    
+    decode.dataIn = state_l.data_out;
+    disp_out = decode.out;
+    
+  }
+}
